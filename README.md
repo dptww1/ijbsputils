@@ -1,0 +1,30 @@
+ijbsputils
+==========
+
+This project is an IntelliJ plugin that supports functionality useful when working on 
+[Brightspot CMS](https://github.com/perfectsense/brightspot-cms).
+
+Building
+--------
+I hope to eventually Maven-ize this, but for now it's copy of my local IntelliJ project.  It probably won't build for you as
+is, as I haven't included the .idea directory.  Maybe I should have.
+
+For that reason, this repo includes the ijbsputils.jar build result.
+
+Installing
+----------
+In IntelliJ, select **Preferences...**, then **Plugins**, then click **Install plugin from disk...**. 
+Navigate to and choose ijbsputils.jar, then **OK** out of the dialog.  You'll need to restart IntelliJ.
+
+Features
+--------
+Not a lot yet.  The plugin creates a new *BSP* menu with a single item, "Go To JSP".  
+If you currently selected a Java class containing a @Renderer.Path annotation,
+"Go To JSP" will open that file for you in the editor.  If your class has multiple
+@Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
+one you want to go to.
+
+Bugs
+----
+Go To JSP doesn't walk the class hierarchy, so it fails if the selected Java class inherits
+its @Renderer.Path(s) from an ancestor.
