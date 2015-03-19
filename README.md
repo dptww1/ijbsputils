@@ -13,7 +13,7 @@ For that reason, this repo includes the ijbsputils.jar build result.
 
 Built and tested using IntelliJ 14.0.3.  On OSX, this version runs under Apple's Java 6 runtime, so
 when you build the extension, make sure to target that.  Getting that working took longer than I
-expected.
+expected. ([IntelliJ's explanation](https://github.com/dptww1/ijbsputils/issues))
 
 Installing
 ----------
