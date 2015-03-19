@@ -1,0 +1,45 @@
+<idea-plugin version="2">
+    <id>com.psddev.ij</id>
+    <name>Brightspot Utilities</name>
+    <version>1.0</version>
+    <vendor email="dave@perfectsensedigital.com" url="http://www.perfectsensedigital.com">Perfect Sense Digital</vendor>
+
+    <description><![CDATA[
+      Allows easy navigation from the current Java class to its corresponding JSP view.<br>
+    ]]></description>
+
+    <change-notes><![CDATA[
+    ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <group id="PSD.Navigation" text="BSP" description="BSP-Specific Navigation">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="PSD.GoToJsp" class="com.psddev.ij.GoToJsp" text="Go to JSP" description="Goes to JSP corresponding to this Java file">
+                <keyboard-shortcut first-keystroke="meta shift J" keymap="$default"/>
+            </action>
+        </group>
+    </actions>
+
+</idea-plugin>
