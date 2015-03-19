@@ -24,11 +24,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Opens the JSP file specified in the @Renderer.Path annotation of a Java class.
+ */
 public class GoToJsp extends AnAction {
+
     public GoToJsp() {
         super("BSP");
     }
 
+    @Override
     public void actionPerformed(AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT); // TODO Needed?
         PsiFile file = event.getData(LangDataKeys.PSI_FILE);
@@ -95,10 +100,18 @@ public class GoToJsp extends AnAction {
         return a;
     }
 
+    /**
+     * Visitor class which collects annotations matching a filtered list within a file.
+     */
     private static class AnnotationAccumulator extends PsiRecursiveElementWalkingVisitor {
+
         private List<PsiAnnotation> list = new ArrayList<PsiAnnotation>();
         private Set<String> nameFilters = new HashSet<String>();
 
+        /**
+         * Constructor.
+         * @param nameFilters the fully-qualified annotation names to accumulate; if empty, all annotations are returned
+         */
         public AnnotationAccumulator(String ...nameFilters) {
             if (nameFilters != null) {
                 this.nameFilters.addAll(Arrays.asList(nameFilters));
@@ -114,16 +127,24 @@ public class GoToJsp extends AnAction {
                     list.add((PsiAnnotation) elt);
                 }
             }
-
         }
 
+        /**
+         * Performs the traversal and accumulation of annotations.
+         * @param file the file to traverse
+         * @return the list of matching annotations, never {@code null}
+         */
         public List<PsiAnnotation> execute(PsiFile file) {
             file.accept(this);
             return list;
         }
     }
 
+    /**
+     * Immutable class to hold the parameters of a @Renderer.Path annotation.
+     */
     private static class RendererPathInfo {
+
         private String value;
         private String context;
 
