@@ -35,7 +35,7 @@ public class GoToJsp extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent event) {
-        Project project = event.getData(PlatformDataKeys.PROJECT); // TODO Needed?
+        Project project = event.getData(PlatformDataKeys.PROJECT);
         PsiFile file = event.getData(LangDataKeys.PSI_FILE);
         if (file == null) {
             Messages.showInfoMessage(project, "Please select a Java class to navigate from.", "Information");
@@ -64,8 +64,6 @@ public class GoToJsp extends AnAction {
                 }
                 break;
         }
-
-        //String text = Messages.showInputDialog(project, "What is your name?", "Input your name", Messages.getQuestionIcon());
     }
 
     private void openJsp(Project project, String path) {
