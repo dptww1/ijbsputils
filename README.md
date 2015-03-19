@@ -28,7 +28,6 @@ If you currently selected a Java class containing a @Renderer.Path annotation,
 @Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
 one you want to go to.
 
-Bugs
-----
-Go To JSP doesn't walk the class hierarchy, so it fails if the selected Java class inherits
-its @Renderer.Path(s) from an ancestor.
+Bugs/Issues
+-----------
+[Bug list](https://github.com/dptww1/ijbsputils/issues)
