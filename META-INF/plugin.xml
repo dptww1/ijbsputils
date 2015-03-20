@@ -36,7 +36,7 @@
     <actions>
         <group id="PSD.Navigation" text="BSP" description="BSP-Specific Navigation">
             <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="PSD.GoToJsp" class="com.psddev.ij.GoToJsp" text="Go to JSP" description="Goes to JSP corresponding to this Java file">
+            <action id="PSD.GoToJsp" class="com.psddev.ij.action.GoToRendererPath" text="Go to JSP" description="Goes to JSP corresponding to this Java file">
                 <keyboard-shortcut first-keystroke="meta shift J" keymap="$default"/>
             </action>
         </group>

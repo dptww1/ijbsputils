@@ -1,4 +1,6 @@
-package com.psddev.ij;
+package com.psddev.ij.action;
+
+import com.psddev.ij.util.AnnotationAccumulator;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -12,26 +14,17 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Opens the JSP file specified in the @Renderer.Path annotation of a Java class.
+ * Opens the file specified in the @Renderer.Path annotation of a Java class.
  */
-public class GoToJsp extends AnAction {
-
-    public GoToJsp() {
-        super("BSP");
-    }
+public class GoToRendererPath extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent event) {
@@ -42,31 +35,31 @@ public class GoToJsp extends AnAction {
             return;
         }
         if (!(file instanceof PsiJavaFile)) {
-            Messages.showInfoMessage(project, "You can only go to a JSP file from a Java file", "Information");
+            Messages.showInfoMessage(project, "You can only go to a Renderer Path file from a Java file", "Information");
             return;
         }
 
-        List<RendererPathInfo> paths = findRendererPaths(file);
+        List<RendererPathInfo> paths = findRendererPaths((PsiJavaFile) file);
         switch (paths.size()) {
             case 0:
                 Messages.showInfoMessage(project, "This class has no @Renderer.Path annotations", "Information");
                 break;
 
             case 1:
-                openJsp(project, paths.get(0).getValue());
+                openRenderPath(project, paths.get(0).getValue());
                 break;
 
             default:
                 int choice = Messages.showDialog("Where do you want to go?", "Multiple @Paths", pathsAsOptions(paths),
                                                  0, Messages.getQuestionIcon());
                 if (0 <= choice && choice < paths.size()) {
-                    openJsp(project, paths.get(choice).getValue());
+                    openRenderPath(project, paths.get(choice).getValue());
                 }
                 break;
         }
     }
 
-    private void openJsp(Project project, String path) {
+    private void openRenderPath(Project project, String path) {
         String fullPath = project.getBaseDir() + "/src/main/webapp" + path;
         if (fullPath.startsWith("file://")) {
             fullPath = fullPath.substring("file://".length());
@@ -80,7 +73,7 @@ public class GoToJsp extends AnAction {
         }
     }
 
-    private List<RendererPathInfo> findRendererPaths(PsiFile file) {
+    private List<RendererPathInfo> findRendererPaths(PsiJavaFile file) {
         List<RendererPathInfo> list = new ArrayList<RendererPathInfo>();
 
         for (PsiAnnotation an : new AnnotationAccumulator("com.psddev.cms.db.Renderer.Path").execute(file)) {
@@ -96,46 +89,6 @@ public class GoToJsp extends AnAction {
             a[i] = paths.get(i).toString();
         }
         return a;
-    }
-
-    /**
-     * Visitor class which collects annotations matching a filtered list within a file.
-     */
-    private static class AnnotationAccumulator extends PsiRecursiveElementWalkingVisitor {
-
-        private List<PsiAnnotation> list = new ArrayList<PsiAnnotation>();
-        private Set<String> nameFilters = new HashSet<String>();
-
-        /**
-         * Constructor.
-         * @param nameFilters the fully-qualified annotation names to accumulate; if empty, all annotations are returned
-         */
-        public AnnotationAccumulator(String ...nameFilters) {
-            if (nameFilters != null) {
-                this.nameFilters.addAll(Arrays.asList(nameFilters));
-            }
-        }
-
-        @Override
-        public void visitElement(PsiElement elt) {
-            super.visitElement(elt);
-            if (elt instanceof PsiAnnotation) {
-                PsiAnnotation anno = (PsiAnnotation) elt;
-                if (nameFilters.isEmpty() || nameFilters.contains(anno.getQualifiedName())) {
-                    list.add((PsiAnnotation) elt);
-                }
-            }
-        }
-
-        /**
-         * Performs the traversal and accumulation of annotations.
-         * @param file the file to traverse
-         * @return the list of matching annotations, never {@code null}
-         */
-        public List<PsiAnnotation> execute(PsiFile file) {
-            file.accept(this);
-            return list;
-        }
     }
 
     /**
