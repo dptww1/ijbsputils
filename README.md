@@ -22,10 +22,10 @@ Navigate to and choose ijbsputils.jar, then **OK** out of the dialog.  You'll ne
 
 Features
 --------
-Not a lot yet.  The plugin creates a new *BSP* menu with a single item, "Go To JSP".
-If you currently selected a Java class containing a @Renderer.Path annotation,
-"Go To JSP" will open that file for you in the editor.  If your class has multiple
-@Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
+Not a lot yet.  The plugin creates a new *BSP* menu with a single item, "Go To Renderer".
+If you have focus on a Java class containing a @Renderer.Path annotation (perhaps indirectly
+in a superclass), "Go To Renderer" will open the renderer file for you in the editor.  If your
+class has multiple @Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
 one you want to go to.
 
 Bugs/Issues
