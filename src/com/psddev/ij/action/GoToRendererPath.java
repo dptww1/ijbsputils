@@ -76,7 +76,7 @@ public class GoToRendererPath extends AnAction {
     private List<RendererPathInfo> findRendererPaths(PsiJavaFile file) {
         List<RendererPathInfo> list = new ArrayList<RendererPathInfo>();
 
-        for (PsiAnnotation an : new AnnotationAccumulator("com.psddev.cms.db.Renderer.Path").execute(file)) {
+        for (PsiAnnotation an : new AnnotationAccumulator("com.psddev.cms.db.Renderer.Path").executeIncludeSuperClasses(file)) {
             list.add(new RendererPathInfo(an));
         }
 

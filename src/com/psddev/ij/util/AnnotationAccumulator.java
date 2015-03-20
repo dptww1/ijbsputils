@@ -2,7 +2,7 @@ package com.psddev.ij.util;
 
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
 
 import java.util.ArrayList;
@@ -45,8 +45,19 @@ public class AnnotationAccumulator extends PsiRecursiveElementWalkingVisitor {
      * @param file the file to traverse
      * @return the list of matching annotations, never {@code null}
      */
-    public List<PsiAnnotation> execute(PsiFile file) {
+    public List<PsiAnnotation> execute(PsiJavaFile file) {
         file.accept(this);
+        return list;
+    }
+
+    public List<PsiAnnotation> executeIncludeSuperClasses(PsiJavaFile file) {
+        while (list.isEmpty() && file != null) {
+            file.accept(this);
+
+            if (list.isEmpty()) {
+                file = PsiFileUtil.getSuperClassFile(file);
+            }
+        }
         return list;
     }
 }

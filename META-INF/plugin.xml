@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.psddev.ij</id>
     <name>Brightspot Utilities</name>
-    <version>1.0</version>
+    <version>1.1.1</version>
     <vendor email="dave@perfectsensedigital.com" url="http://www.perfectsensedigital.com">Perfect Sense Digital</vendor>
 
     <description><![CDATA[
@@ -36,7 +36,7 @@
     <actions>
         <group id="PSD.Navigation" text="BSP" description="BSP-Specific Navigation">
             <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="PSD.GoToJsp" class="com.psddev.ij.action.GoToRendererPath" text="Go to JSP" description="Goes to JSP corresponding to this Java file">
+            <action id="PSD.GoToJsp" class="com.psddev.ij.action.GoToRendererPath" text="Go to Renderer" description="Goes to Renderer of this Java file">
                 <keyboard-shortcut first-keystroke="meta shift J" keymap="$default"/>
             </action>
         </group>
