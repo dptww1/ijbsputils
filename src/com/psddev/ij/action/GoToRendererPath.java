@@ -103,7 +103,7 @@ public class GoToRendererPath extends AnAction {
             fw.close();
 
             return new File(path);
-            
+
         } catch (IOException e) {
             e.printStackTrace();  // TODO: real logging
             return null;
