@@ -18,6 +18,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,17 +62,54 @@ public class GoToRendererPath extends AnAction {
     }
 
     private void openRenderPath(Project project, String path) {
-        String fullPath = project.getBaseDir() + "/src/main/webapp" + path;
-        if (fullPath.startsWith("file://")) {
-            fullPath = fullPath.substring("file://".length());
+        String fullRelativePath = "/src/main/webapp" + path;
+        String fileSystemPath = project.getBaseDir() + fullRelativePath;
+        if (fileSystemPath.startsWith("file://")) {
+            fileSystemPath = fileSystemPath.substring("file://".length());
         }
-        File f = new File(fullPath);
-        if (f.exists() && f.isFile() && f.canRead()) {
-            VirtualFile vf = LocalFileSystem.getInstance().findFileByIoFile(f);
-            FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, vf, 0), true);
+
+        File f = new File(fileSystemPath);
+        if (f.exists()) {
+            if (!f.isFile() || !f.canRead()) {
+                Messages.showInfoMessage(project, "Selected file:\n" + fileSystemPath + "\nisn't a file, or isn't readable", "Information");
+            }
+
         } else {
-            Messages.showInfoMessage(project, fullPath + " doesn't exist!", "Information");
+            int yn = Messages.showOkCancelDialog((Project) null, "Selected path:\n" + fileSystemPath + "\ndoesn't exist.  Create it?", "Missing file",
+                                                 "Yes", "No", Messages.getQuestionIcon());
+            if (yn == Messages.YES) {
+                f = createJspFileSkeleton(fileSystemPath);
+            }
         }
+        if (f.exists()) {
+            VirtualFile vf = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(f);
+            FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, vf, 0), true);
+        }
+    }
+
+    private File createJspFileSkeleton(String path) {
+        try {
+            FileWriter fw = new FileWriter(path);
+            fw.write("JSP Skeleton Goes Here");
+            fw.close();
+
+            return new File(path);
+        } catch (IOException e) {
+            e.printStackTrace();  // TODO: real logging
+            return null;
+        }
+    }
+
+    /**
+     * Returns path part (only) of file path.
+     * <tt>"/some/path/to/some/file.ext" => "/some/path/to/some"</tt>
+     * <tt>"pathlessFile.ext" => ""</tt>
+     * @param filePath path to examine; not {@code null}
+     * @return the path part
+     */
+    private String pathOnly(String filePath) {
+        int idx = filePath.lastIndexOf("/");
+        return idx >= 0 ? filePath.substring(0, idx) : "";
     }
 
     private List<RendererPathInfo> findRendererPaths(PsiJavaFile file) {
