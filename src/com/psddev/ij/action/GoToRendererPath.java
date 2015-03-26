@@ -110,18 +110,6 @@ public class GoToRendererPath extends AnAction {
         }
     }
 
-    /**
-     * Returns path part (only) of file path.
-     * <tt>"/some/path/to/some/file.ext" => "/some/path/to/some"</tt>
-     * <tt>"pathlessFile.ext" => ""</tt>
-     * @param filePath path to examine; not {@code null}
-     * @return the path part
-     */
-    private String pathOnly(String filePath) {
-        int idx = filePath.lastIndexOf("/");
-        return idx >= 0 ? filePath.substring(0, idx) : "";
-    }
-
     private List<RendererPathInfo> findRendererPaths(PsiJavaFile file) {
         List<RendererPathInfo> list = new ArrayList<RendererPathInfo>();
 
