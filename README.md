@@ -28,6 +28,8 @@ in a superclass), "Go To Renderer" will open the renderer file for you in the ed
 class has multiple @Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
 one you want to go to.
 
+If the file doesn't exist, you can opt to have the plug-in create it for you.
+
 Bugs/Issues
 -----------
 [Bug list](https://github.com/dptww1/ijbsputils/issues)
