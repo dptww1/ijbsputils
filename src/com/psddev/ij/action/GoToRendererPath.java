@@ -1,6 +1,7 @@
 package com.psddev.ij.action;
 
 import com.psddev.ij.util.AnnotationAccumulator;
+import com.psddev.ij.util.PathUtil;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -16,6 +17,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -71,14 +74,14 @@ public class GoToRendererPath extends AnAction {
         File f = new File(fileSystemPath);
         if (f.exists()) {
             if (!f.isFile() || !f.canRead()) {
-                Messages.showInfoMessage(project, "Selected file:\n" + fileSystemPath + "\nisn't a file, or isn't readable", "Information");
+                Messages.showInfoMessage(project, "Selected file:\n\n" + fileSystemPath + "\n\nisn't a file, or isn't readable", "Information");
             }
 
         } else {
-            int yn = Messages.showOkCancelDialog((Project) null, "Selected path:\n" + fileSystemPath + "\ndoesn't exist.  Create it?", "Missing file",
+            int yn = Messages.showOkCancelDialog((Project) null, "Selected path:\n\n" + fileSystemPath + "\n\ndoesn't exist.  Create it?", "Missing file",
                                                  "Yes", "No", Messages.getQuestionIcon());
             if (yn == Messages.YES) {
-                f = createJspFileSkeleton(fileSystemPath);
+                f = createJspFileSkeleton(project, fileSystemPath);
             }
         }
         if (f.exists()) {
@@ -87,13 +90,20 @@ public class GoToRendererPath extends AnAction {
         }
     }
 
-    private File createJspFileSkeleton(String path) {
+    private File createJspFileSkeleton(Project project, String path) {
         try {
+            String taglibPath = "/path/to/taglibs.jsp";
+            PsiFile[] taglibFiles = FilenameIndex.getFilesByName(project, "taglibs.jsp", GlobalSearchScope.allScope(project));
+            if (taglibFiles != null && taglibFiles.length > 0) {
+                taglibPath = PathUtil.pathAfter(taglibFiles[0].getVirtualFile().getPath(), "webapp");
+            }
+
             FileWriter fw = new FileWriter(path);
-            fw.write("JSP Skeleton Goes Here");
+            fw.write("<%@ include file=\"" + taglibPath + "\" %>");
             fw.close();
 
             return new File(path);
+            
         } catch (IOException e) {
             e.printStackTrace();  // TODO: real logging
             return null;
