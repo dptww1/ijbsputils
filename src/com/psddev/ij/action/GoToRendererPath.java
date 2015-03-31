@@ -36,18 +36,21 @@ public class GoToRendererPath extends AnAction {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         PsiFile file = event.getData(LangDataKeys.PSI_FILE);
         if (file == null) {
-            Messages.showInfoMessage(project, "Please select a Java class to navigate from.", "Information");
+            event.getPresentation().setEnabled(false);
+            //Messages.showInfoMessage(project, "Please select a Java class to navigate from.", "Information");
             return;
         }
         if (!(file instanceof PsiJavaFile)) {
-            Messages.showInfoMessage(project, "You can only go to a Renderer Path file from a Java file", "Information");
+            event.getPresentation().setEnabled(false);
+            //Messages.showInfoMessage(project, "You can only go to a Renderer Path file from a Java file", "Information");
             return;
         }
 
         List<RendererPathInfo> paths = findRendererPaths((PsiJavaFile) file);
         switch (paths.size()) {
             case 0:
-                Messages.showInfoMessage(project, "This class has no @Renderer.Path annotations", "Information");
+                event.getPresentation().setEnabled(false);
+                //Messages.showInfoMessage(project, "This class has no @Renderer.Path annotations", "Information");
                 break;
 
             case 1:
@@ -81,7 +84,7 @@ public class GoToRendererPath extends AnAction {
             int yn = Messages.showOkCancelDialog((Project) null, "Selected path:\n\n" + fileSystemPath + "\n\ndoesn't exist.  Create it?", "Missing file",
                                                  "Yes", "No", Messages.getQuestionIcon());
             if (yn == Messages.YES) {
-                f = createJspFileSkeleton(project, fileSystemPath);
+                f = createRendererFileSkeleton(project, fileSystemPath);
             }
         }
         if (f.exists()) {
@@ -90,16 +93,23 @@ public class GoToRendererPath extends AnAction {
         }
     }
 
-    private File createJspFileSkeleton(Project project, String path) {
+    private File createRendererFileSkeleton(Project project, String path) {
         try {
             String taglibPath = "/path/to/taglibs.jsp";
-            PsiFile[] taglibFiles = FilenameIndex.getFilesByName(project, "taglibs.jsp", GlobalSearchScope.allScope(project));
+            String taglibsFilename = path.endsWith("ftl") ? "taglibs.ftl" : "taglibs.jsp";
+
+            PsiFile[] taglibFiles = FilenameIndex.getFilesByName(project, taglibsFilename, GlobalSearchScope.allScope(project));
             if (taglibFiles != null && taglibFiles.length > 0) {
                 taglibPath = PathUtil.pathAfter(taglibFiles[0].getVirtualFile().getPath(), "webapp");
             }
 
             FileWriter fw = new FileWriter(path);
-            fw.write("<%@ include file=\"" + taglibPath + "\" %>");
+            if (path.endsWith("ftl")) {
+                fw.write("[#include \"" + taglibPath + "\"]");
+
+            } else {
+                fw.write("<%@ include file=\"" + taglibPath + "\" %>");
+            }
             fw.close();
 
             return new File(path);

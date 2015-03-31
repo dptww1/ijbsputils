@@ -30,6 +30,9 @@ one you want to go to.
 
 If the file doesn't exist, you can opt to have the plug-in create it for you.
 
+The renderer can be a JSP file or a Freemarker (".ftl") file.  If you have a file named "taglibs" with the
+same extension, that file will be included when the renderer is created.
+
 Bugs/Issues
 -----------
 [Bug list](https://github.com/dptww1/ijbsputils/issues)
