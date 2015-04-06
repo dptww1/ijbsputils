@@ -3,8 +3,8 @@ package com.psddev.ij.util;
 public class PathUtil {
     /**
      * Returns part of path after given directory name.
-     * <tt>pathBelow("/abc/def/ghi/file.txt", "def") => "/ghi/file.text"</tt>
-     * <tt>pathBelow("/abc/def/ghi/file.txt", "xyz") => "/abc/def/ghi/file.text"</tt>
+     * <tt>pathAfter("/abc/def/ghi/file.txt", "def") => "/ghi/file.text"</tt>
+     * <tt>pathAfter("/abc/def/ghi/file.txt", "xyz") => "/abc/def/ghi/file.text"</tt>
      *
      * @param completePath path to clip
      * @param dirName directory name at which to clip; this directory is not included in the resulting path
