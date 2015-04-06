@@ -36,21 +36,19 @@ public class GoToRendererPath extends AnAction {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         PsiFile file = event.getData(LangDataKeys.PSI_FILE);
         if (file == null) {
-            event.getPresentation().setEnabled(false);
-            //Messages.showInfoMessage(project, "Please select a Java class to navigate from.", "Information");
+            Messages.showInfoMessage(project, "Please select a Java class to navigate from.", "Information");
             return;
         }
         if (!(file instanceof PsiJavaFile)) {
-            event.getPresentation().setEnabled(false);
-            //Messages.showInfoMessage(project, "You can only go to a Renderer Path file from a Java file", "Information");
+            //event.getPresentation().setEnabled(false);
+            Messages.showInfoMessage(project, "You can only go to a Renderer Path file from a Java file", "Information");
             return;
         }
 
         List<RendererPathInfo> paths = findRendererPaths((PsiJavaFile) file);
         switch (paths.size()) {
             case 0:
-                event.getPresentation().setEnabled(false);
-                //Messages.showInfoMessage(project, "This class has no @Renderer.Path annotations", "Information");
+                Messages.showInfoMessage(project, "This class has no @Renderer.Path annotations", "Information");
                 break;
 
             case 1:
