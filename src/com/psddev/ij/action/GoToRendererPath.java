@@ -1,24 +1,21 @@
 package com.psddev.ij.action;
 
 import com.psddev.ij.util.AnnotationAccumulator;
-import com.psddev.ij.util.PathUtil;
+import com.psddev.ij.util.EditorUtil;
+import com.psddev.ij.util.PsdProjectUtil;
+import com.psddev.ij.util.StringUtil;
+import com.psddev.ij.util.ViewUtil;
 
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -66,11 +63,7 @@ public class GoToRendererPath extends AnAction {
     }
 
     private void openRenderPath(Project project, String path) {
-        String fullRelativePath = "/src/main/webapp" + path;
-        String fileSystemPath = project.getBaseDir() + fullRelativePath;
-        if (fileSystemPath.startsWith("file://")) {
-            fileSystemPath = fileSystemPath.substring("file://".length());
-        }
+        String fileSystemPath = PsdProjectUtil.fileSystemPath(project, "/src/main/webapp" + path);
 
         File f = new File(fileSystemPath);
         if (f.exists()) {
@@ -86,28 +79,17 @@ public class GoToRendererPath extends AnAction {
             }
         }
         if (f.exists()) {
-            VirtualFile vf = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(f);
-            FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, vf, 0), true);
+            EditorUtil.openFile(project, f);
         }
     }
 
     private File createRendererFileSkeleton(Project project, String path) {
         try {
-            String taglibPath = "/path/to/taglibs.jsp";
-            String taglibsFilename = path.endsWith("ftl") ? "taglibs.ftl" : "taglibs.jsp";
-
-            PsiFile[] taglibFiles = FilenameIndex.getFilesByName(project, taglibsFilename, GlobalSearchScope.allScope(project));
-            if (taglibFiles != null && taglibFiles.length > 0) {
-                taglibPath = PathUtil.pathAfter(taglibFiles[0].getVirtualFile().getPath(), "webapp");
-            }
+            String taglibPath = StringUtil.firstNonNull(ViewUtil.getTaglibPath(project, path),
+                                                        "/path/to/taglibs.jsp");
 
             FileWriter fw = new FileWriter(path);
-            if (path.endsWith("ftl")) {
-                fw.write("[#include \"" + taglibPath + "\"]");
-
-            } else {
-                fw.write("<%@ include file=\"" + taglibPath + "\" %>");
-            }
+            fw.write(ViewUtil.buildTaglibIncludeStatementText(taglibPath));
             fw.close();
 
             return new File(path);
