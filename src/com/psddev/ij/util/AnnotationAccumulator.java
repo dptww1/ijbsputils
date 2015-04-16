@@ -60,4 +60,10 @@ public class AnnotationAccumulator extends PsiRecursiveElementWalkingVisitor {
         }
         return list;
     }
+
+    public static PsiAnnotation findAnnotationIncludeSuperClasses(PsiJavaFile file, String... nameFilters) {
+        AnnotationAccumulator a = new AnnotationAccumulator(nameFilters);
+        List<PsiAnnotation> list = a.executeIncludeSuperClasses(file);
+        return list.size() > 0 ? list.get(0) : null;
+    }
 }
