@@ -27,8 +27,8 @@ This plugin adds a new *BSP* menu to the IDE, with the following commands:
 
 ### Go To Renderer
 
-    If you have focus on a Java class containing a @Renderer.Path annotation (perhaps indirectly
-    in a superclass), "Go To Renderer" will open the renderer file for you in the editor.  If your
+If you have focus on a Java class containing a @Renderer.Path annotation (perhaps indirectly
+in a superclass), "Go To Renderer" will open the renderer file for you in the editor.  If your
 class has multiple @Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
 one you want to go to.
 
