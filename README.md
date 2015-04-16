@@ -22,7 +22,11 @@ Navigate to and choose ijbsputils.jar, then **OK** out of the dialog.  You'll ne
 
 Features
 --------
-Not a lot yet.  The plugin creates a new *BSP* menu with a single item, "Go To Renderer".
+
+This plugin adds a new *BSP* menu to the IDE, with the following commands:
+
+1. *Go To Renderer*
+
 If you have focus on a Java class containing a @Renderer.Path annotation (perhaps indirectly
 in a superclass), "Go To Renderer" will open the renderer file for you in the editor.  If your
 class has multiple @Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
@@ -31,7 +35,14 @@ one you want to go to.
 If the file doesn't exist, you can opt to have the plug-in create it for you.
 
 The renderer can be a JSP file or a Freemarker (".ftl") file.  If you have a file named "taglibs" with the
-same extension, that file will be included when the renderer is created.
+same extension, that file will be included when the renderer is
+created.
+
+2. *Go To Model*
+
+If you have focus on a JSP or FTL file, "Go To Model" will open the corresponding Java file
+containing the current file as a @Renderer.Path.  If there are multiple possibilities, you'll be given
+a choice of which to navigate to.
 
 Bugs/Issues
 -----------
