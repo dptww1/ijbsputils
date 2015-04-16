@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.psddev.ij</id>
     <name>Brightspot Utilities</name>
-    <version>1.2.10</version>
+    <version>1.2.10ı</version>
     <vendor email="dave@perfectsensedigital.com" url="http://www.perfectsensedigital.com">Perfect Sense Digital</vendor>
 
     <description><![CDATA[
@@ -40,6 +40,11 @@
                 <keyboard-shortcut first-keystroke="meta shift J" keymap="$default"/>
             </action>
         </group>
+        <action id="PSD.GoToModel" class="com.psddev.ij.action.GoToModel" text="Go to Model"
+                description="Goes to Model of this renderer">
+            <add-to-group group-id="PSD.Navigation" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift meta B"/>
+        </action>
     </actions>
 
 </idea-plugin>
