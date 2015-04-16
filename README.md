@@ -25,10 +25,10 @@ Features
 
 This plugin adds a new *BSP* menu to the IDE, with the following commands:
 
-1. *Go To Renderer*
+### Go To Renderer
 
-If you have focus on a Java class containing a @Renderer.Path annotation (perhaps indirectly
-in a superclass), "Go To Renderer" will open the renderer file for you in the editor.  If your
+    If you have focus on a Java class containing a @Renderer.Path annotation (perhaps indirectly
+    in a superclass), "Go To Renderer" will open the renderer file for you in the editor.  If your
 class has multiple @Renderer.Path annotations, you'll be prompted (with an incredibly ugly UI) for which
 one you want to go to.
 
@@ -38,7 +38,7 @@ The renderer can be a JSP file or a Freemarker (".ftl") file.  If you have a fil
 same extension, that file will be included when the renderer is
 created.
 
-2. *Go To Model*
+### Go To Model
 
 If you have focus on a JSP or FTL file, "Go To Model" will open the corresponding Java file
 containing the current file as a @Renderer.Path.  If there are multiple possibilities, you'll be given
